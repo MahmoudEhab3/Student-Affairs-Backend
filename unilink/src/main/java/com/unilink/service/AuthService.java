@@ -6,6 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.unilink.config.JwtUtil;
+import com.unilink.dto.ChangePasswordRequest;
 import com.unilink.dto.LoginRequest;
 import com.unilink.dto.SignupRequest;
 import com.unilink.entity.Staff;
@@ -73,4 +74,33 @@ public class AuthService {
         }
         return jwtUtil.generateToken(staff.getEmail(), staff.getRole());
     }
+
+    public String changeStudentPassword(ChangePasswordRequest req) {
+    Student student = studentRepo.findByEmail(req.getEmail())
+            .orElseThrow(() -> new RuntimeException("Student not found"));
+
+    if (!passwordEncoder.matches(req.getOldPassword(), student.getPassword())) {
+        throw new RuntimeException("Old password is incorrect");
+    }
+
+    student.setPassword(passwordEncoder.encode(req.getNewPassword()));
+    studentRepo.save(student);
+
+    return "Password updated successfully!";
+}
+
+public String changeStaffPassword(ChangePasswordRequest req) {
+    Staff staff = staffRepo.findByEmail(req.getEmail())
+            .orElseThrow(() -> new RuntimeException("Staff not found"));
+
+    if (!passwordEncoder.matches(req.getOldPassword(), staff.getPassword())) {
+        throw new RuntimeException("Old password is incorrect");
+    }
+
+    staff.setPassword(passwordEncoder.encode(req.getNewPassword()));
+    staffRepo.save(staff);
+
+    return "Password updated successfully!";
+}
+
 }
