@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="a0f71621-ca3b-4901-95e0-362a6ced3fcf" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/src/test/java/com/unilink/controller/AuthControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/src/test/java/com/unilink/controller/AuthControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/controller/AuthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/controller/AuthController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/dto/ChangePasswordRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/dto/ChangePasswordRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/dto/LoginRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/dto/LoginRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/dto/SignupRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/dto/SignupRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/entity/Staff.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/entity/Staff.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/entity/Student$Gender.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/entity/Student$Gender.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/entity/Student.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/entity/Student.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/service/AuthService.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/service/AuthService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/test-classes/com/unilink/controller/AuthControllerIntegrationTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/test-classes/com/unilink/controller/AuthControllerIntegrationTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -12,40 +25,81 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "ahmed-rabi"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;ahmed-rabi&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/MahmoudEhab3/Student-Affairs-Backend.git",
-    "accountId": "7948d67d-9097-4322-a485-c8a854b91451"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/MahmoudEhab3/Student-Affairs-Backend.git&quot;,
+    &quot;accountId&quot;: &quot;7948d67d-9097-4322-a485-c8a854b91451&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 4
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="32FPS82GvzMpjFAJcV4KDagCzrI" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "test",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JUnit.AuthControllerIntegrationTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AuthControllerIntegrationTest.signupStudent_success.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;test&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RunManager" selected="JUnit.AuthControllerIntegrationTest">
+    <configuration name="AuthControllerIntegrationTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="unilink" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.unilink.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.unilink.controller" />
+      <option name="MAIN_CLASS_NAME" value="com.unilink.controller.AuthControllerIntegrationTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AuthControllerIntegrationTest.signupStudent_success" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="unilink" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.unilink.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.unilink.controller" />
+      <option name="MAIN_CLASS_NAME" value="com.unilink.controller.AuthControllerIntegrationTest" />
+      <option name="METHOD_NAME" value="signupStudent_success" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.AuthControllerIntegrationTest" />
+        <item itemvalue="JUnit.AuthControllerIntegrationTest.signupStudent_success" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -63,6 +117,11 @@
       <option name="presentableId" value="Default" />
       <updated>1757013346791</updated>
       <workItem from="1757013348518" duration="324000" />
+      <workItem from="1757086734908" duration="295000" />
+      <workItem from="1757087038618" duration="215000" />
+      <workItem from="1757087270990" duration="183000" />
+      <workItem from="1757157129070" duration="468000" />
+      <workItem from="1757177363736" duration="344000" />
     </task>
     <servers />
   </component>
