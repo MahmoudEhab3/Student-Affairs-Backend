@@ -5,22 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a0f71621-ca3b-4901-95e0-362a6ced3fcf" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/unilink/src/test/java/com/unilink/controller/RequestControllerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unilink/src/test/java/com/unilink/controller/AuthControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/src/test/java/com/unilink/controller/AuthControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/controller/AuthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/controller/AuthController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/dto/ChangePasswordRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/dto/ChangePasswordRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/dto/LoginRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/dto/LoginRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/dto/SignupRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/dto/SignupRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/entity/Staff.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/entity/Staff.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/entity/Student$Gender.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/entity/Student$Gender.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/config/JwtAuthFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/config/JwtAuthFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/config/JwtUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/config/JwtUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/config/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/config/SecurityConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/controller/RequestController.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/controller/RequestController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/dto/RequestDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/dto/RequestDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/dto/RequestResponseDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/dto/RequestResponseDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/entity/Request$Status.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/entity/Request$Status.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/entity/Request.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/entity/Request.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/entity/Student.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/entity/Student.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/repository/RequestRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/repository/RequestRepository.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/service/AuthService.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/service/AuthService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/service/RequestService.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/service/RequestService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unilink/target/classes/com/unilink/service/StudentService.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/classes/com/unilink/service/StudentService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unilink/target/test-classes/com/unilink/controller/AuthControllerIntegrationTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/unilink/target/test-classes/com/unilink/controller/AuthControllerIntegrationTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit5 Test Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -46,37 +59,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;JUnit.AuthControllerIntegrationTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.AuthControllerIntegrationTest.signupStudent_success.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;test&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JUnit.AuthControllerIntegrationTest.executor": "Run",
+    "JUnit.AuthControllerIntegrationTest.signupStudent_success.executor": "Run",
+    "JUnit.RequestControllerTest.createRequest_noAuth_unauthorized.executor": "Run",
+    "JUnit.RequestControllerTest.createRequest_staffUser_success.executor": "Run",
+    "JUnit.RequestControllerTest.createRequest_studentUser_forbidden.executor": "Run",
+    "JUnit.RequestControllerTest.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "git-widget-placeholder": "test",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager" selected="JUnit.AuthControllerIntegrationTest">
-    <configuration name="AuthControllerIntegrationTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="unilink" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.unilink.controller.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.unilink.controller" />
-      <option name="MAIN_CLASS_NAME" value="com.unilink.controller.AuthControllerIntegrationTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.unilink.controller" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.RequestControllerTest">
     <configuration name="AuthControllerIntegrationTest.signupStudent_success" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="unilink" />
       <extension name="coverage">
@@ -93,9 +105,75 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RequestControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="unilink" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.unilink.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.unilink.controller" />
+      <option name="MAIN_CLASS_NAME" value="com.unilink.controller.RequestControllerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RequestControllerTest.createRequest_noAuth_unauthorized" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="unilink" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.unilink.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.unilink.controller" />
+      <option name="MAIN_CLASS_NAME" value="com.unilink.controller.RequestControllerTest" />
+      <option name="METHOD_NAME" value="createRequest_noAuth_unauthorized" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RequestControllerTest.createRequest_staffUser_success" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="unilink" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.unilink.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.unilink.controller" />
+      <option name="MAIN_CLASS_NAME" value="com.unilink.controller.RequestControllerTest" />
+      <option name="METHOD_NAME" value="createRequest_staffUser_success" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RequestControllerTest.createRequest_studentUser_forbidden" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="unilink" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.unilink.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.unilink.controller" />
+      <option name="MAIN_CLASS_NAME" value="com.unilink.controller.RequestControllerTest" />
+      <option name="METHOD_NAME" value="createRequest_studentUser_forbidden" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.AuthControllerIntegrationTest" />
+        <item itemvalue="JUnit.RequestControllerTest" />
+        <item itemvalue="JUnit.RequestControllerTest.createRequest_noAuth_unauthorized" />
+        <item itemvalue="JUnit.RequestControllerTest.createRequest_studentUser_forbidden" />
+        <item itemvalue="JUnit.RequestControllerTest.createRequest_staffUser_success" />
         <item itemvalue="JUnit.AuthControllerIntegrationTest.signupStudent_success" />
       </list>
     </recent_temporary>
@@ -122,6 +200,7 @@
       <workItem from="1757087270990" duration="183000" />
       <workItem from="1757157129070" duration="468000" />
       <workItem from="1757177363736" duration="344000" />
+      <workItem from="1757254866561" duration="1916000" />
     </task>
     <servers />
   </component>
