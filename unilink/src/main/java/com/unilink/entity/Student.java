@@ -62,4 +62,7 @@ public class Student {
     public enum Gender {
         Male, Female, Other
     }
+    public Integer getId() {
+        return this.studentID;
+    }
 }
