@@ -28,7 +28,7 @@ public class AuthService {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
-    // ✅ Student Signup -> returns JWT
+    // ✅ Student Signup -> returns JWT (with studentID in token)
     public String signupStudentAndReturnToken(SignupRequest req) {
         if (studentRepo.findByEmail(req.getEmail()).isPresent()) {
             throw new RuntimeException("Email already exists");
@@ -51,56 +51,55 @@ public class AuthService {
 
         studentRepo.save(student);
 
-        // return JWT for new student
-        return jwtUtil.generateToken(student.getEmail(), "STUDENT");
+        // return JWT for new student (with studentID included)
+        return jwtUtil.generateToken(student.getEmail(), "STUDENT", student.getId());
     }
 
-    // ✅ Student Login -> returns JWT
+    // ✅ Student Login -> returns JWT (with studentID in token)
     public String loginStudent(LoginRequest req) {
         Student student = studentRepo.findByEmail(req.getEmail())
                 .orElseThrow(() -> new RuntimeException("Student not found"));
         if (!passwordEncoder.matches(req.getPassword(), student.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
-        return jwtUtil.generateToken(student.getEmail(), "STUDENT");
+        return jwtUtil.generateToken(student.getEmail(), "STUDENT", student.getId());
     }
 
-    // ✅ Staff Login -> returns JWT
+    // ✅ Staff Login -> returns JWT (role only, no studentID)
     public String loginStaff(LoginRequest req) {
         Staff staff = staffRepo.findByEmail(req.getEmail())
                 .orElseThrow(() -> new RuntimeException("Staff not found"));
         if (!passwordEncoder.matches(req.getPassword(), staff.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
-        return jwtUtil.generateToken(staff.getEmail(), staff.getRole());
+        return jwtUtil.generateToken(staff.getEmail(), staff.getRole(), null);
     }
 
     public String changeStudentPassword(ChangePasswordRequest req) {
-    Student student = studentRepo.findByEmail(req.getEmail())
-            .orElseThrow(() -> new RuntimeException("Student not found"));
+        Student student = studentRepo.findByEmail(req.getEmail())
+                .orElseThrow(() -> new RuntimeException("Student not found"));
 
-    if (!passwordEncoder.matches(req.getOldPassword(), student.getPassword())) {
-        throw new RuntimeException("Old password is incorrect");
+        if (!passwordEncoder.matches(req.getOldPassword(), student.getPassword())) {
+            throw new RuntimeException("Old password is incorrect");
+        }
+
+        student.setPassword(passwordEncoder.encode(req.getNewPassword()));
+        studentRepo.save(student);
+
+        return "Password updated successfully!";
     }
 
-    student.setPassword(passwordEncoder.encode(req.getNewPassword()));
-    studentRepo.save(student);
+    public String changeStaffPassword(ChangePasswordRequest req) {
+        Staff staff = staffRepo.findByEmail(req.getEmail())
+                .orElseThrow(() -> new RuntimeException("Staff not found"));
 
-    return "Password updated successfully!";
-}
+        if (!passwordEncoder.matches(req.getOldPassword(), staff.getPassword())) {
+            throw new RuntimeException("Old password is incorrect");
+        }
 
-public String changeStaffPassword(ChangePasswordRequest req) {
-    Staff staff = staffRepo.findByEmail(req.getEmail())
-            .orElseThrow(() -> new RuntimeException("Staff not found"));
+        staff.setPassword(passwordEncoder.encode(req.getNewPassword()));
+        staffRepo.save(staff);
 
-    if (!passwordEncoder.matches(req.getOldPassword(), staff.getPassword())) {
-        throw new RuntimeException("Old password is incorrect");
+        return "Password updated successfully!";
     }
-
-    staff.setPassword(passwordEncoder.encode(req.getNewPassword()));
-    staffRepo.save(staff);
-
-    return "Password updated successfully!";
-}
-
 }
