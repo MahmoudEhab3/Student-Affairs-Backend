@@ -25,53 +25,66 @@ public class RequestController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    // ✅ Staff only: Create request
-    @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity<?> createRequest(
-            HttpServletRequest request,
-            @RequestParam String title,
-            @RequestParam Integer studentID,
-            @RequestParam String type,
-            @RequestParam String description,
-            @RequestParam(required = false) MultipartFile document) throws IOException {
+// ✅ Staff and Students: Create request
+@PostMapping(consumes = {"multipart/form-data"})
+public ResponseEntity<?> createRequest(
+        HttpServletRequest request,
+        @RequestParam String title,
+        @RequestParam(required = false) Integer studentID, // staff can pass it, student ignored
+        @RequestParam String type,
+        @RequestParam String description,
+        @RequestParam(required = false) MultipartFile document) throws IOException {
 
-        String role = getRoleFromRequest(request);
-        if (!"STAFF".equals(role)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only staff can create requests.");
+    String role = getRoleFromRequest(request);
+    String token = extractToken(request);
+
+    Integer effectiveStudentId;
+    if ("STUDENT".equals(role)) {
+        // Student can only create request for themselves
+        effectiveStudentId = jwtUtil.getStudentIdFromToken(token);
+    } else if ("STAFF".equals(role)) {
+        // Staff must provide studentID
+        if (studentID == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Staff must provide a studentID when creating a request.");
         }
-
-        // 🔹 File validation (T16, T17)
-        if (document != null && !document.isEmpty()) {
-            String contentType = document.getContentType();
-            long fileSize = document.getSize();
-
-            // Allowed formats: PDF, JPG, PNG
-            if (!(contentType.equalsIgnoreCase("application/pdf")
-                    || contentType.equalsIgnoreCase("image/jpeg")
-                    || contentType.equalsIgnoreCase("image/png"))) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("Only PDF, JPG, and PNG files are allowed.");
-            }
-
-            // Max size 5MB
-            if (fileSize > (5 * 1024 * 1024)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("File size must not exceed 5 MB.");
-            }
-        }
-
-        RequestDTO dto = new RequestDTO();
-        dto.setTitle(title);
-        dto.setStudentID(studentID);
-        dto.setType(type);
-        dto.setDescription(description);
-        if (document != null && !document.isEmpty()) {
-            dto.setDocument(document.getBytes());
-        }
-
-        Request savedRequest = service.createRequest(dto);
-        return new ResponseEntity<>(savedRequest, HttpStatus.CREATED);
+        effectiveStudentId = studentID;
+    } else {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only staff and students can create requests.");
     }
+
+    // 🔹 File validation
+    if (document != null && !document.isEmpty()) {
+        String contentType = document.getContentType();
+        long fileSize = document.getSize();
+
+        // Allowed formats: PDF, JPG, PNG
+        if (!(contentType.equalsIgnoreCase("application/pdf")
+                || contentType.equalsIgnoreCase("image/jpeg")
+                || contentType.equalsIgnoreCase("image/png"))) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Only PDF, JPG, and PNG files are allowed.");
+        }
+
+        // Max size 5MB
+        if (fileSize > (5 * 1024 * 1024)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("File size must not exceed 5 MB.");
+        }
+    }
+
+    RequestDTO dto = new RequestDTO();
+    dto.setTitle(title);
+    dto.setStudentID(effectiveStudentId);
+    dto.setType(type);
+    dto.setDescription(description);
+    if (document != null && !document.isEmpty()) {
+        dto.setDocument(document.getBytes());
+    }
+
+    Request savedRequest = service.createRequest(dto);
+    return new ResponseEntity<>(savedRequest, HttpStatus.CREATED);
+}
 
     // ✅ Students: only their own requests; Staff: all requests
     @GetMapping
