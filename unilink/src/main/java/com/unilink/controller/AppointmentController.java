@@ -5,6 +5,10 @@ import com.unilink.dto.AppointmentDTO;
 import com.unilink.entity.Appointment;
 import com.unilink.service.AppointmentService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,22 +25,31 @@ public class AppointmentController {
         this.jwtUtil = jwtUtil;
     }
 
-    // ✅ Create appointment
-    @PostMapping
-    public ResponseEntity<?> createAppointment(@RequestBody AppointmentDTO dto, HttpServletRequest request) {
-        String role = getRoleFromRequest(request);
-        String token = extractToken(request);
+// ✅ Create appointment
+@PostMapping
+public ResponseEntity<?> createAppointment(@Valid @RequestBody AppointmentDTO dto, HttpServletRequest request) {
+    String role = getRoleFromRequest(request);
+    String token = extractToken(request);
 
-        if ("STUDENT".equals(role)) {
-            Integer studentId = jwtUtil.getStudentIdFromToken(token);
-            if (!dto.getStudentID().equals(studentId)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You can only create your own appointments.");
-            }
+    if ("STUDENT".equals(role)) {
+        Integer studentId = jwtUtil.getStudentIdFromToken(token);
+        if (!dto.getStudentID().equals(studentId)) {
+            // 🔹 Return plain string so test passes
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("You can only create your own appointments.");
         }
-
-        Appointment saved = service.createAppointment(dto);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
+
+    // 🔹 Check staff existence (this one can stay JSON if your test expects it)
+    if (!service.staffExists(dto.getStaffID())) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", "Staff with ID " + dto.getStaffID() + " does not exist"));
+    }
+
+    Appointment saved = service.createAppointment(dto);
+    return new ResponseEntity<>(saved, HttpStatus.CREATED);
+}
+
 
     // ✅ Students: only own; Staff: all
     @GetMapping
@@ -54,7 +67,9 @@ public class AppointmentController {
 
     // ✅ Update appointment
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateAppointment(@PathVariable Integer id, @RequestBody AppointmentDTO dto, HttpServletRequest request) {
+    public ResponseEntity<?> updateAppointment(@PathVariable Integer id,
+                                               @Valid @RequestBody AppointmentDTO dto,
+                                               HttpServletRequest request) {
         String role = getRoleFromRequest(request);
         String token = extractToken(request);
 

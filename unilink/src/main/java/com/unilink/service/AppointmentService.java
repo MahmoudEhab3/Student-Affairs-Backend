@@ -3,6 +3,7 @@ package com.unilink.service;
 import com.unilink.dto.AppointmentDTO;
 import com.unilink.entity.Appointment;
 import com.unilink.repository.AppointmentRepository;
+import com.unilink.repository.StaffRepository; // 🔹 import staff repo
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -14,9 +15,11 @@ import java.util.Optional;
 @Service
 public class AppointmentService {
     private final AppointmentRepository repository;
+    private final StaffRepository staffRepository; // 🔹 add staff repo
 
-    public AppointmentService(AppointmentRepository repository) {
+    public AppointmentService(AppointmentRepository repository, StaffRepository staffRepository) {
         this.repository = repository;
+        this.staffRepository = staffRepository;
     }
 
     // --- 🔹 Validation helper ---
@@ -58,6 +61,11 @@ public class AppointmentService {
                 throw new RuntimeException("This time slot overlaps with an existing appointment.");
             }
         }
+    }
+
+    // 🔹 New method to check staff existence
+    public boolean staffExists(Integer staffId) {
+        return staffRepository.existsById(staffId);
     }
 
     // Create appointment if time slot is free
