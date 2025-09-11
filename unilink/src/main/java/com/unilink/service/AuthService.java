@@ -52,7 +52,7 @@ public class AuthService {
         studentRepo.save(student);
 
         // return JWT for new student (with studentID included)
-        return jwtUtil.generateToken(student.getEmail(), "STUDENT", student.getId());
+        return jwtUtil.generateToken(student.getEmail(), "STUDENT", student.getId(), null);
     }
 
     // ✅ Student Login -> returns JWT (with studentID in token)
@@ -62,17 +62,17 @@ public class AuthService {
         if (!passwordEncoder.matches(req.getPassword(), student.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
-        return jwtUtil.generateToken(student.getEmail(), "STUDENT", student.getId());
+        return jwtUtil.generateToken(student.getEmail(), "STUDENT", student.getId(), null);
     }
 
-    // ✅ Staff Login -> returns JWT (role only, no studentID)
+    // ✅ Staff Login -> returns JWT (with staffID in token)
     public String loginStaff(LoginRequest req) {
         Staff staff = staffRepo.findByEmail(req.getEmail())
                 .orElseThrow(() -> new RuntimeException("Staff not found"));
         if (!passwordEncoder.matches(req.getPassword(), staff.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
-        return jwtUtil.generateToken(staff.getEmail(), staff.getRole(), null);
+        return jwtUtil.generateToken(staff.getEmail(), staff.getRole(), null, staff.getStaffID());
     }
 
     public String changeStudentPassword(ChangePasswordRequest req) {
