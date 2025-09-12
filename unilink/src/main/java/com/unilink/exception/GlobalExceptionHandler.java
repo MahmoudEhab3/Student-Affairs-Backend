@@ -21,4 +21,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status)
                 .body(Map.of("message", ex.getMessage()));
     }
+
+    @ExceptionHandler(UnauthorizedAccessException.class)
+    public ResponseEntity<Map<String, String>> handleUnauthorizedAccess(UnauthorizedAccessException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(Map.of("message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(NotificationRetrievalException.class)
+    public ResponseEntity<Map<String, String>> handleNotificationRetrieval(NotificationRetrievalException ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("message", ex.getMessage()));
+    }
+
 }
+
+

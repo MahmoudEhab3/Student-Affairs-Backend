@@ -2,9 +2,11 @@ package com.unilink.service;
 
 import com.unilink.dto.AppointmentDTO;
 import com.unilink.entity.Appointment;
+import com.unilink.entity.Notification;
 import com.unilink.repository.AppointmentRepository;
-import com.unilink.repository.StaffRepository; // 🔹 import staff repo
+import com.unilink.repository.StaffRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -15,11 +17,15 @@ import java.util.Optional;
 @Service
 public class AppointmentService {
     private final AppointmentRepository repository;
-    private final StaffRepository staffRepository; // 🔹 add staff repo
+    private final StaffRepository staffRepository;
+    private final NotificationService notificationService;
 
-    public AppointmentService(AppointmentRepository repository, StaffRepository staffRepository) {
+    public AppointmentService(AppointmentRepository repository,
+                              StaffRepository staffRepository,
+                              NotificationService notificationService) {
         this.repository = repository;
         this.staffRepository = staffRepository;
+        this.notificationService = notificationService;
     }
 
     // --- 🔹 Validation helper ---
@@ -69,6 +75,7 @@ public class AppointmentService {
     }
 
     // Create appointment if time slot is free
+    @Transactional
     public Appointment createAppointment(AppointmentDTO dto) {
         validateAppointmentTime(dto);
         checkOverlap(dto.getDate(), dto.getTime());
@@ -81,7 +88,17 @@ public class AppointmentService {
         appt.setPurpose(dto.getPurpose());
         appt.setStatus(Appointment.Status.Scheduled);
 
-        return repository.save(appt);
+        Appointment savedAppointment = repository.save(appt);
+
+        // Create notification for the student
+        Notification notification = new Notification();
+        notification.setUserId(dto.getStudentID());
+        notification.setType(Notification.NotificationType.APPOINTMENT);
+        notification.setTitle("Appointment Scheduled");
+        notification.setMessage("Your appointment has been scheduled for " + dto.getDate() + " at " + dto.getTime());
+        notificationService.createNotification(notification);
+
+        return savedAppointment;
     }
 
     public List<Appointment> getAllAppointments() {
@@ -96,6 +113,7 @@ public class AppointmentService {
         return repository.findById(id);
     }
 
+    @Transactional
     public Optional<Appointment> updateAppointment(Integer id, AppointmentDTO dto) {
         validateAppointmentTime(dto);
         checkOverlap(dto.getDate(), dto.getTime());
@@ -105,15 +123,53 @@ public class AppointmentService {
             appt.setTime(dto.getTime());
             appt.setPurpose(dto.getPurpose());
             appt.setStatus(dto.getStatus());
-            return repository.save(appt);
+
+            Appointment updatedAppointment = repository.save(appt);
+
+            // Create notification for appointment update
+            Notification notification = new Notification();
+            notification.setUserId(appt.getStudentID());
+            notification.setType(Notification.NotificationType.APPOINTMENT);
+            notification.setTitle("Appointment Updated");
+            notification.setMessage("Your appointment has been updated to " + dto.getDate() + " at " + dto.getTime());
+            notificationService.createNotification(notification);
+
+            return updatedAppointment;
         });
     }
 
+    @Transactional
     public boolean deleteAppointment(Integer id) {
-        if (repository.existsById(id)) {
+        return repository.findById(id).map(appt -> {
+            // Create notification for appointment cancellation
+            Notification notification = new Notification();
+            notification.setUserId(appt.getStudentID());
+            notification.setType(Notification.NotificationType.APPOINTMENT);
+            notification.setTitle("Appointment Cancelled");
+            notification.setMessage("Your appointment scheduled for " + appt.getDate() + " has been cancelled");
+            notificationService.createNotification(notification);
+
             repository.deleteById(id);
             return true;
-        }
-        return false;
+        }).orElse(false);
+    }
+
+    // Add this method to update appointment status with notifications
+    @Transactional
+    public Optional<Appointment> updateAppointmentStatus(Integer id, Appointment.Status status) {
+        return repository.findById(id).map(appt -> {
+            appt.setStatus(status);
+            Appointment updatedAppointment = repository.save(appt);
+
+            // Create notification for status change
+            Notification notification = new Notification();
+            notification.setUserId(appt.getStudentID());
+            notification.setType(Notification.NotificationType.APPOINTMENT);
+            notification.setTitle("Appointment Status Updated");
+            notification.setMessage("Your appointment status has been changed to: " + status);
+            notificationService.createNotification(notification);
+
+            return updatedAppointment;
+        });
     }
 }

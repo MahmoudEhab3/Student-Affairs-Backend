@@ -12,7 +12,7 @@ public class JwtUtil {
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private final long EXPIRATION_TIME = 1000 * 60 * 60 * 24; // 24h
 
-    public String generateToken(String email, String role, Integer studentId) {
+    public String generateToken(String email, String role, Integer studentId, Integer staffId) {
         JwtBuilder builder = Jwts.builder()
                 .setSubject(email)
                 .claim("role", role)
@@ -22,6 +22,9 @@ public class JwtUtil {
 
         if (studentId != null) {
             builder.claim("studentId", studentId);
+        }
+        if (staffId != null) {
+            builder.claim("staffId", staffId);
         }
 
         return builder.compact();
@@ -59,5 +62,12 @@ public class JwtUtil {
                 .getBody()
                 .get("studentId", Integer.class);
     }
-}
 
+    public Integer getStaffIdFromToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key).build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("staffId", Integer.class);
+    }
+}
