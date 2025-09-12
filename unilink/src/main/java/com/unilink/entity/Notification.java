@@ -14,7 +14,7 @@ public class Notification {
     @Column(name = "UserID", nullable = false)
     private Integer userId;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = NotificationTypeConverter.class)
     @Column(name = "Type", nullable = false)
     private NotificationType type;
 
@@ -116,5 +116,31 @@ public class Notification {
 
     public enum NotificationStatus {
         Unread, Read
+    }
+
+    // Converter class to handle case sensitivity
+    @Converter
+    public static class NotificationTypeConverter implements AttributeConverter<NotificationType, String> {
+
+        @Override
+        public String convertToDatabaseColumn(NotificationType attribute) {
+            if (attribute == null) {
+                return null;
+            }
+            return attribute.name().toLowerCase(); // Store as lowercase in DB
+        }
+
+        @Override
+        public NotificationType convertToEntityAttribute(String dbData) {
+            if (dbData == null) {
+                return null;
+            }
+            try {
+                return NotificationType.valueOf(dbData.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                // Handle unknown values gracefully
+                return NotificationType.SYSTEM; // Default value
+            }
+        }
     }
 }

@@ -1,4 +1,3 @@
-
 package com.unilink.controller;
 
 import com.unilink.config.JwtUtil;
@@ -8,6 +7,7 @@ import com.unilink.service.NotificationService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -107,7 +107,7 @@ public class NotificationController {
     private NotificationDTO convertToDTO(Notification notification) {
         NotificationDTO dto = new NotificationDTO();
         dto.setId(notification.getId());
-        dto.setType(notification.getType());
+        dto.setType(notification.getType().name());
         dto.setTitle(notification.getTitle());
         dto.setMessage(notification.getMessage());
         dto.setTimestamp(notification.getTimestamp());
