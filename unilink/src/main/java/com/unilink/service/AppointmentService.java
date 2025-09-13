@@ -50,12 +50,13 @@ public class AppointmentService {
         }
     }
 
-    private void checkOverlap(LocalDate date, LocalTime time) {
+    private void checkOverlap(LocalDate date, LocalTime time, Integer excludeId) {
         LocalTime slotStart = time;
         LocalTime slotEnd = time.plusMinutes(30);
 
         List<Appointment> sameDayAppointments = repository.findAll().stream()
                 .filter(a -> a.getDate().equals(date))
+                .filter(a -> excludeId == null || !a.getApptID().equals(excludeId))
                 .toList();
 
         for (Appointment existing : sameDayAppointments) {
@@ -78,7 +79,7 @@ public class AppointmentService {
     @Transactional
     public Appointment createAppointment(AppointmentDTO dto) {
         validateAppointmentTime(dto);
-        checkOverlap(dto.getDate(), dto.getTime());
+        checkOverlap(dto.getDate(), dto.getTime(), null);
 
         Appointment appt = new Appointment();
         appt.setStudentID(dto.getStudentID());
@@ -116,7 +117,7 @@ public class AppointmentService {
     @Transactional
     public Optional<Appointment> updateAppointment(Integer id, AppointmentDTO dto) {
         validateAppointmentTime(dto);
-        checkOverlap(dto.getDate(), dto.getTime());
+        checkOverlap(dto.getDate(), dto.getTime(),id);
 
         return repository.findById(id).map(appt -> {
             appt.setDate(dto.getDate());
