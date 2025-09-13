@@ -100,12 +100,14 @@ public class RequestService {
             if (dto.getDocument() != null) {
                 existing.setDocument(dto.getDocument());
             }
-            existing.setStatus(existing.getStatus());
+
+            if (dto.getStatus() != null) {
+                existing.setStatus(dto.getStatus());
+            }
             Request updated = repository.save(existing);
             return toResponseDTO(updated);
         });
     }
-
     @Transactional
     public boolean deleteRequest(Integer id) {
         return repository.findById(id).map(request -> {
