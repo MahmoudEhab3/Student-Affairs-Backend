@@ -33,14 +33,9 @@ public ResponseEntity<?> createAppointment(@Valid @RequestBody AppointmentDTO dt
 
     if ("STUDENT".equals(role)) {
         Integer studentId = jwtUtil.getStudentIdFromToken(token);
-        if (!dto.getStudentID().equals(studentId)) {
-            // 🔹 Return plain string so test passes
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("You can only create your own appointments.");
-        }
+        dto.setStudentID(studentId);
     }
 
-    // 🔹 Check staff existence (this one can stay JSON if your test expects it)
     if (!service.staffExists(dto.getStaffID())) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Map.of("message", "Staff with ID " + dto.getStaffID() + " does not exist"));
