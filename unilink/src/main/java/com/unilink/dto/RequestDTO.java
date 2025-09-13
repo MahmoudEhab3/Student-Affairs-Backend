@@ -1,5 +1,7 @@
 package com.unilink.dto;
 
+import com.unilink.entity.Request;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -22,6 +24,17 @@ public class RequestDTO {
     private String description;
 
     private byte[] document;
+
+    private Request.Status status; 
+
+    
+    public Request.Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Request.Status status) {
+        this.status = status;
+    }
 
     public String getTitle() {
         return title;
