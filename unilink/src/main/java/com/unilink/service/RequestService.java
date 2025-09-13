@@ -92,22 +92,20 @@ public class RequestService {
     }
 
     @Transactional
-public Optional<RequestResponseDTO> updateRequest(Integer id, RequestDTO dto) {
-    return repository.findById(id).map(existing -> {
-        existing.setTitle(dto.getTitle());
-        existing.setType(dto.getType());
-        existing.setDescription(dto.getDescription());
-        if (dto.getDocument() != null) {
-            existing.setDocument(dto.getDocument());
-        }
+    public Optional<RequestResponseDTO> updateRequest(Integer id, RequestDTO dto) {
+        return repository.findById(id).map(existing -> {
+            existing.setTitle(dto.getTitle());
+            existing.setType(dto.getType());
+            existing.setDescription(dto.getDescription());
+            if (dto.getDocument() != null) {
+                existing.setDocument(dto.getDocument());
+            }
+            existing.setStatus(existing.getStatus());
+            Request updated = repository.save(existing);
+            return toResponseDTO(updated);
+        });
+    }
 
-        if (dto.getStatus() != null) {
-            existing.setStatus(dto.getStatus());
-        }
-        Request updated = repository.save(existing);
-        return toResponseDTO(updated);
-    });
-}
     @Transactional
     public boolean deleteRequest(Integer id) {
         return repository.findById(id).map(request -> {
