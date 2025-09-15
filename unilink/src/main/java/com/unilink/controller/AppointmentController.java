@@ -60,22 +60,26 @@ public ResponseEntity<?> createAppointment(@Valid @RequestBody AppointmentDTO dt
         return ResponseEntity.ok(service.getAllAppointments());
     }
 
-    // ✅ Update appointment
     @PutMapping("/{id}")
     public ResponseEntity<?> updateAppointment(@PathVariable Integer id,
-                                               @Valid @RequestBody AppointmentDTO dto,
-                                               HttpServletRequest request) {
+                                            @Valid @RequestBody AppointmentDTO dto,
+                                            HttpServletRequest request) {
         String role = getRoleFromRequest(request);
         String token = extractToken(request);
 
+        Appointment appt = service.getAppointmentById(id).orElse(null);
+        if (appt == null) return ResponseEntity.notFound().build();
+
         if ("STUDENT".equals(role)) {
             Integer studentId = jwtUtil.getStudentIdFromToken(token);
-            Appointment appt = service.getAppointmentById(id).orElse(null);
-            if (appt == null) return ResponseEntity.notFound().build();
 
             if (!appt.getStudentID().equals(studentId)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You can only reschedule your own appointments.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("You can only reschedule your own appointments.");
             }
+
+            // 🚫 Students cannot change status
+            dto.setStatus(appt.getStatus());
         }
 
         return service.updateAppointment(id, dto)
