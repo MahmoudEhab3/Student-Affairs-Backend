@@ -5,6 +5,7 @@ import com.unilink.entity.Appointment;
 import com.unilink.entity.Notification;
 import com.unilink.repository.AppointmentRepository;
 import com.unilink.repository.StaffRepository;
+import com.unilink.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,13 +20,20 @@ public class AppointmentService {
     private final AppointmentRepository repository;
     private final StaffRepository staffRepository;
     private final NotificationService notificationService;
+    private final StudentRepository studentRepository;
+    private final EmailService emailService;
 
     public AppointmentService(AppointmentRepository repository,
                               StaffRepository staffRepository,
-                              NotificationService notificationService) {
+                              NotificationService notificationService,
+    EmailService emailService,
+    StudentRepository studentRepository) {
         this.repository = repository;
         this.staffRepository = staffRepository;
         this.notificationService = notificationService;
+        this.emailService = emailService;
+        this.studentRepository = studentRepository;
+
     }
 
     // --- 🔹 Validation helper ---
@@ -98,6 +106,13 @@ public class AppointmentService {
         notification.setTitle("Appointment Scheduled");
         notification.setMessage("Your appointment has been scheduled for " + dto.getDate() + " at " + dto.getTime());
         notificationService.createNotification(notification);
+
+        // Send email notification
+        String emailMessage = String.format(
+                "Your appointment has been scheduled for %s at %s with purpose: %s",
+                dto.getDate(), dto.getTime(), dto.getPurpose()
+        );
+        sendAppointmentEmailNotification(dto.getStudentID(), "Appointment Scheduled", emailMessage);
 
         return savedAppointment;
     }
@@ -172,5 +187,18 @@ public class AppointmentService {
 
             return updatedAppointment;
         });
+    }
+    private void sendAppointmentEmailNotification(Integer studentId, String subject, String message) {
+        try {
+            studentRepository.findById(studentId).ifPresent(student -> {
+                String emailText = String.format(
+                        "Dear %s,\n\n%s\n\nBest regards,\nStudent Affairs System",
+                        student.getName(), message
+                );
+                emailService.sendEmail(student.getEmail(), subject, emailText);
+            });
+        } catch (Exception e) {
+            System.err.println("Failed to send appointment email: " + e.getMessage());
+        }
     }
 }

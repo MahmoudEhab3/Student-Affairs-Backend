@@ -1,7 +1,9 @@
 package com.unilink.service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
+import com.unilink.dto.UserUpdateRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +22,15 @@ public class AuthService {
     private final StaffRepository staffRepo;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final EmailService emailService; // Add EmailService
 
-    public AuthService(StudentRepository studentRepo, StaffRepository staffRepo, JwtUtil jwtUtil) {
+    public AuthService(StudentRepository studentRepo, StaffRepository staffRepo,
+                       JwtUtil jwtUtil, EmailService emailService) {
         this.studentRepo = studentRepo;
         this.staffRepo = staffRepo;
         this.jwtUtil = jwtUtil;
         this.passwordEncoder = new BCryptPasswordEncoder();
+        this.emailService = emailService; // Initialize EmailService
     }
 
     // ✅ Student Signup -> returns JWT (with studentID in token)
@@ -101,5 +106,39 @@ public class AuthService {
         staffRepo.save(staff);
 
         return "Password updated successfully!";
+    }
+    // ✅ Update staff profile (fixed version)
+    public Staff updateStaff(Integer staffId, UserUpdateRequest updateRequest) {
+        Staff staff = staffRepo.findById(staffId)
+                .orElseThrow(() -> new RuntimeException("Staff not found"));
+
+        if (updateRequest.getName() != null) {
+            staff.setName(updateRequest.getName());
+        }
+        if (updateRequest.getEmail() != null) {
+            // Check if email is already taken by another staff
+            if (staffRepo.existsByEmailAndIdNot(updateRequest.getEmail(), staffId)) {
+                throw new RuntimeException("Email is already in use by another staff member");
+            }
+            staff.setEmail(updateRequest.getEmail());
+        }
+
+
+        Staff updatedStaff = staffRepo.save(staff);
+
+        // Send email notification
+        String emailMessage = String.format(
+                "Your profile has been successfully updated.\n\n" +
+                        "Name: %s\nEmail: %s\nPhone: %s\nDepartment: %s\nPosition: %s",
+                updatedStaff.getName(), updatedStaff.getEmail()
+        );
+        emailService.sendEmail(updatedStaff.getEmail(), "Profile Updated", emailMessage);
+
+        return updatedStaff;
+    }
+
+    // ✅ Get staff by ID
+    public Optional<Staff> getStaffById(Integer staffId) {
+        return staffRepo.findById(staffId);
     }
 }

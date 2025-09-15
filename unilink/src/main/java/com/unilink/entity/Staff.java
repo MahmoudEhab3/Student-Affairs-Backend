@@ -6,13 +6,15 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "Staff") 
+@Table(name = "Staff")
 public class Staff {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "StaffID")
-    private Integer staffID;
+    private Integer id;
+
+
 
     @Column(name = "Name")
     private String name;
@@ -25,6 +27,8 @@ public class Staff {
 
     @Column(name = "Role")
     private String role;
+
+
 
     @Column(name = "CreatedAt", insertable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -42,4 +46,11 @@ public class Staff {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    // Getter for the primary key
+    public Integer getStaffID() {
+        return this.id;
+    }
+
+
 }

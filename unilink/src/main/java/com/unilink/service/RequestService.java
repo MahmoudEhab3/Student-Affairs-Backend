@@ -1,5 +1,6 @@
 package com.unilink.service;
 
+import com.unilink.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 import com.unilink.dto.RequestDTO;
 import com.unilink.dto.RequestResponseDTO;
@@ -16,10 +17,16 @@ import java.util.Optional;
 public class RequestService {
     private final RequestRepository repository;
     private final NotificationService notificationService;
+    private final EmailService emailService;
+    private final StudentRepository studentRepository;
 
-    public RequestService(RequestRepository repository, NotificationService notificationService) {
+
+    public RequestService(RequestRepository repository, NotificationService notificationService, StudentRepository studentRepository, EmailService emailService) {
         this.repository = repository;
         this.notificationService = notificationService;
+        this.studentRepository = studentRepository;
+        this.emailService = emailService;
+
     }
 
     @Transactional
@@ -34,17 +41,15 @@ public class RequestService {
 
         Request savedRequest = repository.save(request);
 
-        // Create notification for request submission
-        Notification notification = new Notification();
-        notification.setUserId(dto.getStudentID());
-        notification.setType(Notification.NotificationType.REQUEST);
-        notification.setTitle("Request Submitted");
-        notification.setMessage("Your request for " + dto.getType() + " has been submitted and is under review");
-        notificationService.createNotification(notification);
+        // Send email notification
+        String emailMessage = String.format(
+                "Your request '%s' has been submitted and is under review.",
+                dto.getTitle()
+        );
+        sendRequestEmailNotification(dto.getStudentID(), "Request Submitted", emailMessage);
 
         return savedRequest;
     }
-
     private RequestResponseDTO toResponseDTO(Request request) {
         RequestResponseDTO dto = new RequestResponseDTO();
         dto.setRequestID(request.getRequestID());
@@ -155,5 +160,18 @@ public class RequestService {
 
             return toResponseDTO(updated);
         });
+    }
+    private void sendRequestEmailNotification(Integer studentId, String subject, String message) {
+        try {
+            studentRepository.findById(studentId).ifPresent(student -> {
+                String emailText = String.format(
+                        "Dear %s,\n\n%s\n\nBest regards,\nStudent Affairs System",
+                        student.getName(), message
+                );
+                emailService.sendEmail(student.getEmail(), subject, emailText);
+            });
+        } catch (Exception e) {
+            System.err.println("Failed to send request email: " + e.getMessage());
+        }
     }
 }

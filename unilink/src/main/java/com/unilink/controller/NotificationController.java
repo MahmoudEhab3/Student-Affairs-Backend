@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -113,5 +114,40 @@ public class NotificationController {
         dto.setTimestamp(notification.getTimestamp());
         dto.setRead(notification.isRead());
         return dto;
+    }
+
+    // Add this method to your existing NotificationController
+    @PostMapping("/create")
+    public ResponseEntity<?> createNotification(
+            @RequestParam String title,
+            @RequestParam String message,
+            @RequestParam String type,
+            HttpServletRequest request) {
+
+        String token = getTokenFromRequest(request);
+        if (token == null || !jwtUtil.validateToken(token)) {
+            return ResponseEntity.badRequest().body("Invalid token");
+        }
+
+        Integer userId = getUserIdFromToken(token);
+        if (userId == null) {
+            return ResponseEntity.badRequest().body("User ID not found in token");
+        }
+
+        // Create a new Notification object
+        Notification notification = new Notification();
+        notification.setUserId(userId);
+        notification.setTitle(title);
+        notification.setMessage(message);
+        notification.setType(Notification.NotificationType.valueOf(type));
+        notification.setTimestamp(LocalDateTime.now());
+        notification.setStatus(Notification.NotificationStatus.valueOf("Unread"));
+
+        try {
+            Notification createdNotification = notificationService.createNotification(notification);
+            return ResponseEntity.ok(createdNotification);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to create notification: " + e.getMessage());
+        }
     }
 }

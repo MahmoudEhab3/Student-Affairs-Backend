@@ -111,7 +111,7 @@ public class Notification {
     }
 
     public enum NotificationType {
-        APPOINTMENT, REQUEST, SYSTEM, ALERT
+        APPOINTMENT, REQUEST, SYSTEM, ALERT, INFO
     }
 
     public enum NotificationStatus {
