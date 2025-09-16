@@ -26,6 +26,9 @@ public class Request {
     @Column(columnDefinition = "ENUM('Pending','Approved','Rejected','In Progress') DEFAULT 'Pending'")
     private Status status = Status.Pending;
 
+    @Column(length = 255)
+    private String comment;
+
     @Lob
     private byte[] document;  
 
@@ -44,6 +47,15 @@ public class Request {
     public void setRequestID(Integer requestID) {
         this.requestID = requestID;
     }
+
+    public String getComment() {
+    return comment;
+}
+
+public void setComment(String comment) {
+    this.comment = comment;
+}
+
 
     public String getTitle() {
         return title;

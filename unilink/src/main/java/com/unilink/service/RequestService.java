@@ -124,6 +124,28 @@ public class RequestService {
         }).orElse(false);
     }
 
+    @Transactional
+public Optional<RequestResponseDTO> updateRequestStatusAndComment(Integer id, Request.Status status, String comment) {
+    return repository.findById(id).map(existing -> {
+        existing.setStatus(status);
+        existing.setComment(comment);
+
+        Request updated = repository.save(existing);
+
+        // 🔔 Notify the student
+        Notification notification = new Notification();
+        notification.setUserId(existing.getStudentID());
+        notification.setType(Notification.NotificationType.REQUEST);
+        notification.setTitle("Request Status Updated");
+        notification.setMessage("Your request for " + existing.getType() +
+                " is now " + status + (comment != null ? " (Note: " + comment + ")" : ""));
+        notificationService.createNotification(notification);
+
+        return toResponseDTO(updated);
+    });
+}
+
+
     // Add this method to update request status with notifications
     @Transactional
     public Optional<RequestResponseDTO> updateRequestStatus(Integer id, Request.Status status) {

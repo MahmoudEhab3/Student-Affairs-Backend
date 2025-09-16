@@ -3,9 +3,12 @@ package com.unilink.controller;
 import com.unilink.config.JwtUtil;
 import com.unilink.dto.RequestDTO;
 import com.unilink.dto.RequestResponseDTO;
+import com.unilink.dto.RequestStatusDTO;
 import com.unilink.entity.Request;
 import com.unilink.service.RequestService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -148,6 +151,24 @@ public ResponseEntity<?> createRequest(
                 ResponseEntity.noContent().build() :
                 ResponseEntity.notFound().build();
     }
+
+    @PutMapping("/{id}/status")
+public ResponseEntity<?> updateStatusAndComment(
+        @PathVariable Integer id,
+        @Valid @RequestBody RequestStatusDTO dto,
+        HttpServletRequest request) {
+
+    String role = getRoleFromRequest(request);
+    if (!"STAFF".equals(role)) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body("Only staff can update request status and comment.");
+    }
+
+    return service.updateRequestStatusAndComment(id, dto.getStatus(), dto.getComment())
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+}
+
 
     // --- 🔹 Helpers ---
     private String extractToken(HttpServletRequest request) {
