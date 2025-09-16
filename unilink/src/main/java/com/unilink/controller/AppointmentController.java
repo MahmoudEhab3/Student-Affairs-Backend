@@ -2,6 +2,7 @@ package com.unilink.controller;
 
 import com.unilink.config.JwtUtil;
 import com.unilink.dto.AppointmentDTO;
+import com.unilink.dto.AppointmentStatusDTO;
 import com.unilink.entity.Appointment;
 import com.unilink.service.AppointmentService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -107,6 +108,22 @@ public ResponseEntity<?> createAppointment(@Valid @RequestBody AppointmentDTO dt
                 ResponseEntity.noContent().build() :
                 ResponseEntity.notFound().build();
     }
+
+    @PutMapping("/{id}/status")
+public ResponseEntity<?> updateStatusAndComment(@PathVariable Integer id,
+                                                @Valid @RequestBody AppointmentStatusDTO dto,
+                                                HttpServletRequest request) {
+    String role = getRoleFromRequest(request);
+    if (!"STAFF".equals(role)) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                             .body("Only staff can update status and comment.");
+    }
+
+    return service.updateStatusAndComment(id, dto.getStatus(), dto.getComment())
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+}
+
 
     // --- 🔹 Helpers ---
     private String extractToken(HttpServletRequest request) {

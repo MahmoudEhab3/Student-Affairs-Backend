@@ -173,4 +173,26 @@ public class AppointmentService {
             return updatedAppointment;
         });
     }
+
+    @Transactional
+public Optional<Appointment> updateStatusAndComment(Integer id, Appointment.Status status, String comment) {
+    return repository.findById(id).map(appt -> {
+        appt.setStatus(status);
+        appt.setComment(comment);
+
+        Appointment updatedAppointment = repository.save(appt);
+
+        // 🔔 Create notification for student
+        Notification notification = new Notification();
+        notification.setUserId(appt.getStudentID());
+        notification.setType(Notification.NotificationType.APPOINTMENT);
+        notification.setTitle("Appointment Update");
+        notification.setMessage("Your appointment status is now " + status +
+                                (comment != null ? " (Note: " + comment + ")" : ""));
+        notificationService.createNotification(notification);
+
+        return updatedAppointment;
+    });
+}
+
 }

@@ -35,6 +35,9 @@ public class Appointment {
     @Column(name = "Status", nullable = false)
     private Status status = Status.Scheduled;
 
+    @Column(name = "Comment", length = 255)
+    private String comment;
+
     @Column(name = "CreatedAt")
     private LocalDateTime createdAt;
 
