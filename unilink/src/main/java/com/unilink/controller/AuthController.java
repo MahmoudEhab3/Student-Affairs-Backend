@@ -3,7 +3,9 @@ import java.util.Map;
 import org.springframework.web.bind.annotation.*;
 
 import com.unilink.dto.ChangePasswordRequest;
+import com.unilink.dto.ForgotPasswordRequest;
 import com.unilink.dto.LoginRequest;
+import com.unilink.dto.ResetPasswordRequest;
 import com.unilink.dto.SignupRequest;
 import com.unilink.service.AuthService;
 
@@ -46,6 +48,23 @@ public Map<String, String> changeStudentPassword(@Valid @RequestBody ChangePassw
 public Map<String, String> changeStaffPassword(@Valid @RequestBody ChangePasswordRequest req) {
     String msg = authService.changeStaffPassword(req);
     return Map.of("message", msg);
+}
+
+@PostMapping("/forgot-password")
+    public Map<String, String> forgotPassword(@Valid @RequestBody ForgotPasswordRequest req) {
+        String message = authService.generatePasswordResetToken(req.getEmail());
+        return Map.of("message", message);
+    }
+
+    @PostMapping("/reset-password")
+    public Map<String, String> resetPassword(@Valid @RequestBody ResetPasswordRequest req) {
+        String message = authService.resetPassword(req.getToken(), req.getNewPassword());
+        return Map.of("message", message);
+    }
+    @GetMapping("/reset-password")
+    public Map<String, String> resetPasswordGet(@RequestParam String token, @RequestParam String newPassword) {
+        String message = authService.resetPassword(token, newPassword);
+        return Map.of("message", message);
 }
 
 }

@@ -7,12 +7,15 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "students") 
+@Table(name = "students")
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "StudentID") 
-    private Integer studentID;
+    @Column(name = "StudentID")
+    private Integer id;
+
+    @Column(name = "StudentIDNumber", unique = true)
+    private String studentId; // University student ID (like "202100001")
 
     @Column(name = "Name")
     private String name;
@@ -35,6 +38,9 @@ public class Student {
 
     @Column(name = "Department")
     private String department;
+
+    @Column(name = "AcademicYear")
+    private Integer academicYear;
 
     @Column(name = "PhoneNumber", nullable = true, length = 20)
     private String phoneNumber;
@@ -62,7 +68,27 @@ public class Student {
     public enum Gender {
         Male, Female, Other
     }
+
+    // Getter for the primary key
     public Integer getId() {
-        return this.studentID;
+        return this.id;
+    }
+
+    // Getter and setter for studentId (university ID)
+    public String getStudentId() {
+        return this.studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+
+    // Getter and setter for phone (alias for phoneNumber)
+    public String getPhone() {
+        return this.phoneNumber;
+    }
+
+    public void setPhone(String phone) {
+        this.phoneNumber = phone;
     }
 }
