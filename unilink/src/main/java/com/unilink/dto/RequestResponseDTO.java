@@ -14,6 +14,16 @@ public class RequestResponseDTO {
     private Request.Status status;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
+    private String studentName;
+    private byte[] document;
+
+    public byte[] getDocument() {
+        return document;
+    }
+
+    public void setDocument(byte[] document) {
+        this.document = document;
+    }
 
     public Integer getRequestID() {
         return requestID;
@@ -78,5 +88,12 @@ public class RequestResponseDTO {
     public void setUpdatedDate(LocalDateTime updatedDate) {
         this.updatedDate = updatedDate;
     }
-}
+    public String getStudentName() {
+        return studentName;
+    }
 
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+}

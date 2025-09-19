@@ -46,7 +46,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 User userDetails = new User(
                         email,
                         "", // no password needed, already authenticated via JWT
-                        Collections.singleton(() -> role) // set role from token
+                        Collections.singleton(() -> "ROLE_" + role) // set role from token
                 );
 
                 // Authentication object

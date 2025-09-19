@@ -1,11 +1,12 @@
 package com.unilink.service;
 
-import org.springframework.stereotype.Service;
 import com.unilink.dto.RequestDTO;
 import com.unilink.dto.RequestResponseDTO;
 import com.unilink.entity.Request;
 import com.unilink.entity.Notification;
 import com.unilink.repository.RequestRepository;
+import com.unilink.repository.StudentRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -16,10 +17,14 @@ import java.util.Optional;
 public class RequestService {
     private final RequestRepository repository;
     private final NotificationService notificationService;
+    private final StudentRepository studentRepository;
 
-    public RequestService(RequestRepository repository, NotificationService notificationService) {
+    public RequestService(RequestRepository repository,
+                          NotificationService notificationService,
+                          StudentRepository studentRepository) {
         this.repository = repository;
         this.notificationService = notificationService;
+        this.studentRepository = studentRepository;
     }
 
     @Transactional
@@ -34,7 +39,7 @@ public class RequestService {
 
         Request savedRequest = repository.save(request);
 
-        // Create notification for request submission
+        // 🔔 Notification for submission
         Notification notification = new Notification();
         notification.setUserId(dto.getStudentID());
         notification.setType(Notification.NotificationType.REQUEST);
@@ -55,6 +60,14 @@ public class RequestService {
         dto.setStatus(request.getStatus());
         dto.setCreatedDate(request.getCreatedDate());
         dto.setUpdatedDate(request.getUpdatedDate());
+        dto.setDocument(request.getDocument());
+
+        // Fetch student name
+        if (request.getStudentID() != null) {
+            studentRepository.findById(request.getStudentID())
+                    .ifPresent(student -> dto.setStudentName(student.getName()));
+        }
+
         return dto;
     }
 
@@ -68,6 +81,16 @@ public class RequestService {
         dto.setStatus(request.getStatus() != null ? request.getStatus() : Request.Status.Pending);
         dto.setCreatedDate(request.getCreatedDate() != null ? request.getCreatedDate() : LocalDateTime.now());
         dto.setUpdatedDate(request.getUpdatedDate() != null ? request.getUpdatedDate() : LocalDateTime.now());
+        dto.setDocument(request.getDocument());
+
+        // Safe fetch student name
+        if (request.getStudentID() != null) {
+            studentRepository.findById(request.getStudentID())
+                    .ifPresent(student -> dto.setStudentName(student.getName()));
+        } else {
+            dto.setStudentName("");
+        }
+
         return dto;
     }
 
@@ -78,7 +101,6 @@ public class RequestService {
                 .toList();
     }
 
-    // ✅ Added: fetch by studentId
     public List<RequestResponseDTO> getRequestsByStudentId(Integer studentId) {
         return repository.findByStudentID(studentId)
                 .stream()
@@ -100,7 +122,6 @@ public class RequestService {
             if (dto.getDocument() != null) {
                 existing.setDocument(dto.getDocument());
             }
-
             if (dto.getStatus() != null) {
                 existing.setStatus(dto.getStatus());
             }
@@ -108,10 +129,11 @@ public class RequestService {
             return toResponseDTO(updated);
         });
     }
+
     @Transactional
     public boolean deleteRequest(Integer id) {
         return repository.findById(id).map(request -> {
-            // Create notification for request deletion
+            // 🔔 Notification for deletion
             Notification notification = new Notification();
             notification.setUserId(request.getStudentID());
             notification.setType(Notification.NotificationType.REQUEST);
@@ -125,36 +147,33 @@ public class RequestService {
     }
 
     @Transactional
-public Optional<RequestResponseDTO> updateRequestStatusAndComment(Integer id, Request.Status status, String comment) {
-    return repository.findById(id).map(existing -> {
-        existing.setStatus(status);
-        existing.setComment(comment);
+    public Optional<RequestResponseDTO> updateRequestStatusAndComment(Integer id, Request.Status status, String comment) {
+        return repository.findById(id).map(existing -> {
+            existing.setStatus(status);
+            existing.setComment(comment);
 
-        Request updated = repository.save(existing);
+            Request updated = repository.save(existing);
 
-        // 🔔 Notify the student
-        Notification notification = new Notification();
-        notification.setUserId(existing.getStudentID());
-        notification.setType(Notification.NotificationType.REQUEST);
-        notification.setTitle("Request Status Updated");
-        notification.setMessage("Your request for " + existing.getType() +
-                " is now " + status + (comment != null ? " (Note: " + comment + ")" : ""));
-        notificationService.createNotification(notification);
+            // 🔔 Notify student
+            Notification notification = new Notification();
+            notification.setUserId(existing.getStudentID());
+            notification.setType(Notification.NotificationType.REQUEST);
+            notification.setTitle("Request Status Updated");
+            notification.setMessage("Your request for " + existing.getType() +
+                    " is now " + status + (comment != null ? " (Note: " + comment + ")" : ""));
+            notificationService.createNotification(notification);
 
-        return toResponseDTO(updated);
-    });
-}
+            return toResponseDTO(updated);
+        });
+    }
 
-
-    // Add this method to update request status with notifications
     @Transactional
     public Optional<RequestResponseDTO> updateRequestStatus(Integer id, Request.Status status) {
         return repository.findById(id).map(existing -> {
-            Request.Status oldStatus = existing.getStatus();
             existing.setStatus(status);
             Request updated = repository.save(existing);
 
-            // Create notification for status change
+            // 🔔 Notify student of status change
             Notification notification = new Notification();
             notification.setUserId(existing.getStudentID());
             notification.setType(Notification.NotificationType.REQUEST);
