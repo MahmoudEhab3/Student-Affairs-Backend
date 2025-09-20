@@ -29,14 +29,15 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // enable CORS
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/api/auth/**",
-                                "/api/notifications/**",
-                                "/api/auth/reset-password**"
-                        ).permitAll() // allow login/register/reset
-                        .anyRequest().authenticated() // protect all others
-                )
+                        .authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                        "/api/auth/**",
+                        "/api/notifications/**",
+                        "/api/auth/reset-password**",
+                        "/chatbot/**"                  
+                ).permitAll() // allow login/register/reset/chatbot
+                .anyRequest().authenticated()
+        )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable());
